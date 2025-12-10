@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup Website Example</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        /* --- POPUP STYLES --- */
+
+        /* The Overlay (Background) */
+        .popup-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+            backdrop-filter: blur(5px); /* Optional: blur background */
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* The Popup Content Box */
+        .popup-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 300px;
+            text-align: center;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        /* Classes to handle animation */
+        .popup-overlay.show {
+            opacity: 1;
+        }
+        
+        .popup-overlay.show .popup-content {
+            transform: scale(1);
+        }
+
+        /* The Close Button */
+        .close-btn {
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .close-btn:hover {
+            background-color: #ff6b81;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Website Content -->
+    <div>
+        <h1>Welcome to my Website</h1>
+        <p>Wait 1 second for the popup to appear.</p>
+    </div>
+
+    <!-- POPUP HTML STRUCTURE -->
+    <div id="myPopup" class="popup-overlay">
+        <div class="popup-content">
+            <h2 style="margin-top: 0; color: #2ed573;">Special Offer!</h2>
+            <p>This is your HTML area inside the popup.</p>
+            <p>It will close automatically in <span id="timer">5</span> seconds.</p>
+            <button id="closePopupBtn" class="close-btn">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Select elements
+        const popup = document.getElementById('myPopup');
+        const closeBtn = document.getElementById('closePopupBtn');
+        const timerSpan = document.getElementById('timer');
+
+        let autoCloseTimer;
+        let countdownInterval;
+        let secondsLeft = 5;
+
+        // Function to Open Popup
+        function openPopup() {
+            popup.style.display = 'flex';
+            // Small timeout to allow CSS transition to detect the display change
+            setTimeout(() => {
+                popup.classList.add('show');
+            }, 10);
+
+            // Start Countdown for text display
+            countdownInterval = setInterval(() => {
+                secondsLeft--;
+                timerSpan.innerText = secondsLeft;
+                if(secondsLeft <= 0) clearInterval(countdownInterval);
+            }, 1000);
+
+            // Set Timer to Auto Close after 5 seconds (5000ms)
+            autoCloseTimer = setTimeout(() => {
+                closePopup();
+            }, 5000);
+        }
+
+        // Function to Close Popup
+        function closePopup() {
+            popup.classList.remove('show');
+            
+            // Wait for animation to finish before hiding display
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 300);
+
+            // Clear timers if closed manually so it doesn't try to close again
+            clearTimeout(autoCloseTimer);
+            clearInterval(countdownInterval);
+        }
+
+        // Event Listener for Manual Close Button
+        closeBtn.addEventListener('click', closePopup);
+
+        openPopup();
+    </script>
+
+</body>
+</html>
