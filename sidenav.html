@@ -11,6 +11,7 @@
             --sidebar-width: 260px;
             --header-height: 70px;
             --marquee-height: 40px;
+            --marquee-duration: 40s; /* Longer duration -> slower marquee */
             --primary-color: #2c3e50; /* Dark Blue */
             --accent-color: #3498db;  /* Light Blue */
             --alert-color: #e74c3c;   /* Red for alerts */
@@ -209,7 +210,7 @@
         .marquee-content {
             display: inline-block;
             white-space: nowrap;
-            animation: scroll 20s linear infinite;
+            animation: scroll var(--marquee-duration) linear infinite;
             padding-left: 100%; /* Start from right */
             font-weight: 500;
         }
@@ -226,7 +227,12 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* --- PAGE CONTENT --- */
+        @media (prefers-reduced-motion: reduce) {
+            .marquee-content {
+                animation: none;
+            }
+        }
+
         .page-inner {
             padding: 30px;
         }
